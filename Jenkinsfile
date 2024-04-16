@@ -3,16 +3,13 @@ pipeline{
         BUILD_NUM=''
     }
     agent any
-    // tools{
-    //     nodejs 'node'
-    // }
     stages{
-        stage("Clone Code"){
+        stage("Git checkout"){
             steps{
             git branch: "master",url: 'https://github.com/niconyango/gallery.git'
             }
         }
-        stage("Installing Dependencies"){
+        stage("Install npm"){
             steps{
                 sh 'npm install'
             }
@@ -22,16 +19,13 @@ pipeline{
         //         sh 'npm test'
         //     }
         // }
-        stage("Deploy Code"){
+        stage("Deploy to render"){
             steps{
-                sh 'npm run'
-                // echo 'Deploying the code' 
-                
+                sh 'npm run'          
             }
         }
         stage("User Notification"){
             steps{
-                //slackSend color: 'good',message:'Deployment Successful'
                 slackSend color: 'good', message: "Build N°: ${env.BUILD_NUMBER} was successfully deployed in 'https://gallery-2.onrender.com/'"
             }
         }
