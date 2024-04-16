@@ -3,14 +3,14 @@ pipeline{
         BUILD_NUM=''
     }
     agent any
-
+    
     stages{
-        stage("Clone repo"){
+        stage("Cloning Code"){
             steps{
             git branch: "master",url: 'https://github.com/calebkingeno03/gallery.git'
             }
         }
-        stage("Install npm"){
+        stage("Install code"){
             steps{
                 sh 'npm install'
             }
@@ -19,8 +19,8 @@ pipeline{
         //     steps{
         //         sh 'npm test'
         //     }
-        }
-        stage("Deploy Code"){
+        // }
+        stage("Deployment of Code"){
             steps{
                 sh 'npm run'
                 
@@ -31,7 +31,7 @@ pipeline{
                 slackSend color: 'good', message: "Build N°: ${env.BUILD_NUMBER} was successfully deployed in 'https://gallery-2.onrender.com/'"
             }
         }
-    }
+    
      post{
         always{
             emailext(
@@ -45,10 +45,9 @@ pipeline{
                 </html>''',
                 to:'calebroykoech03@gmail.com',
                 from:'calebroykoech03@gmail.com',
-                replyTo:'calebroykoech03@gmail.com',
+                replyTo:'calebroykoech03.com',
                 mimeType:'text/html'
             )
         }
 
     }  
-
