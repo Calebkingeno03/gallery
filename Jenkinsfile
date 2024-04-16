@@ -3,14 +3,16 @@ pipeline{
         BUILD_NUM=''
     }
     agent any
-    
+    // tools{
+    //     nodejs 'node'
+    // }
     stages{
-        stage("Cloning Code"){
+        stage("Clone Code"){
             steps{
-            git branch: "master",url: 'https://github.com/calebkingeno03/gallery.git'
+            git branch: "master",url: 'https://github.com/niconyango/gallery.git'
             }
         }
-        stage("Install code"){
+        stage("Installing Dependencies"){
             steps{
                 sh 'npm install'
             }
@@ -20,18 +22,20 @@ pipeline{
         //         sh 'npm test'
         //     }
         // }
-        stage("Deployment of Code"){
+        stage("Deploy Code"){
             steps{
                 sh 'npm run'
+                // echo 'Deploying the code' 
                 
             }
         }
         stage("User Notification"){
             steps{
+                //slackSend color: 'good',message:'Deployment Successful'
                 slackSend color: 'good', message: "Build N°: ${env.BUILD_NUMBER} was successfully deployed in 'https://gallery-2.onrender.com/'"
             }
         }
-    
+    }
      post{
         always{
             emailext(
@@ -45,11 +49,10 @@ pipeline{
                 </html>''',
                 to:'calebroykoech03@gmail.com',
                 from:'calebroykoech03@gmail.com',
-                replyTo:'calebroykoech03.com',
+                replyTo:'calebroykoech03@gmail.com',
                 mimeType:'text/html'
             )
         }
 
     }  
-  }  
- }  
+}
